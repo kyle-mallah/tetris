@@ -1,34 +1,18 @@
 import React from 'react';
-import { GRID_WIDTH, GRID_HEIGHT } from '../constants';
-import TetrominoCell from './tetrominoCell'
+import TetrominoCell from './tetrominoCell';
 
 class TetrisGamePanel extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {board: this.initBoard()};
-    }
-
-    initBoard() {
-        let board = [];
-
-        for (let r = 0; r < GRID_HEIGHT; r++) {
-            let row = [];
-            for (let c = 0; c < GRID_WIDTH; c++) {
-                row.push(null);
-            }
-            board.push(row);
-        }
-
-        return board;
     }
 
     render() {
-        const tetronimoBoard = this.state.board.map((boardRow, rowIndex) => {
+        const tetrominoBoard = this.props.board.map((boardRow, rowIndex) => {
 
             const tetrominoRow = boardRow.map((tetromino, columnIndex) => {
-                    return <TetrominoCell key={columnIndex}/>
+                    return <TetrominoCell type={tetromino} key={columnIndex}/>
             });
 
             return (
@@ -40,7 +24,7 @@ class TetrisGamePanel extends React.Component {
 
         return (
             <div className="TetrisGamePanel">
-                {tetronimoBoard}
+                {tetrominoBoard}
             </div>
         )
     }

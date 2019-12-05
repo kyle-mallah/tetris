@@ -1,14 +1,29 @@
 import React from 'react';
-import TopPanel from './topPanel'
-import TetrisGamePanel from './tetrisGamePanel'
+import TopPanel from './topPanel';
+import TetrisGamePanel from './tetrisGamePanel';
+import TetrisController from '../tetrisController';
 
-function App(props) {
-    return (
-        <div>
-            <TopPanel />
-            <TetrisGamePanel />
-        </div>
-    )
+class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.controller = new TetrisController;
+
+        this.state = {
+            board: this.controller.initBoard(),
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <TopPanel />
+                <TetrisGamePanel board={this.state.board}/>
+            </div>
+        )
+    }
+
 }
 
 export default App;
