@@ -1,0 +1,14 @@
+.tetrominoRow {
+    display: flex;
+    flex-direction:row;
+}
+
+.tetrominoCell {
+    border: 1px solid black;
+    float: left;
+    margin-right: -1px;
+    margin-top: -1px;
+
+    width: 1.5em;
+    height: 1.5em;
+}
