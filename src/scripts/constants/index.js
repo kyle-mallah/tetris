@@ -11,3 +11,10 @@ export const TETROMINO_TYPE = Object.freeze({
     T:Symbol('T'),
     Z:Symbol('Z')
 });
+
+export const TETROMINO_ROTATION_STATE = Object.freeze({
+    0:Symbol('0'),
+    1:Symbol('1'),
+    2:Symbol('2'),
+    3:Symbol('3'),
+});
