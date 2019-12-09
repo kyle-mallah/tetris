@@ -97,3 +97,14 @@ test("No Collision: Tetromino sitting one column left of non-empty board cell", 
 
     expect(controller.isCollision(board, tetromino)).toBeFalsy();
 });
+
+test("Tetromino should drop by one row", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0,0],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.dropTetromino(tetromino);
+
+    expect(updatedTetromino.position).toEqual([1,0]);
+});

@@ -25,6 +25,17 @@ class TetrisController {
         return false;
     }
 
+    dropTetromino(tetromino) {
+        let [pos_y, pos_x] = tetromino.position;
+
+        let updatedTetromino = new Tetromino(
+            tetromino.type,
+            [pos_y+1, pos_x],
+            tetromino.rotationState);
+
+        return updatedTetromino;
+    }
+
     initBoard() {
         let board = [];
 
