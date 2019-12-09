@@ -79,7 +79,7 @@ test("No Collision: Tetromino sitting one column right of non-empty board cell",
 
     let tetromino = new Tetromino(
         TETROMINO_TYPE.O,
-        [GRID_HEIGHT-2, GRID_WIDTH-2],
+        [GRID_HEIGHT-2, GRID_WIDTH-3],
         TETROMINO_ROTATION_STATE[0]);
 
     expect(controller.isCollision(board, tetromino)).toBeFalsy();
@@ -98,6 +98,19 @@ test("No Collision: Tetromino sitting one column left of non-empty board cell", 
     expect(controller.isCollision(board, tetromino)).toBeFalsy();
 });
 
+test("Collision: Tetromino extending past bottom of board", () => {
+    board[GRID_HEIGHT-1] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
+    board[GRID_HEIGHT-1][0] = TETROMINO_TYPE.NONE;
+    board[GRID_HEIGHT-1][1] = TETROMINO_TYPE.NONE;
+
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [GRID_HEIGHT-1, -1],
+        TETROMINO_ROTATION_STATE[0]);
+
+    expect(controller.isCollision(board, tetromino)).toBeTruthy();
+});
+
 test("Tetromino should drop by one row", () => {
     let tetromino = new Tetromino(
         TETROMINO_TYPE.O,
@@ -108,3 +121,4 @@ test("Tetromino should drop by one row", () => {
 
     expect(updatedTetromino.position).toEqual([1,0]);
 });
+
