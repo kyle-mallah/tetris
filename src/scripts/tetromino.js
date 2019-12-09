@@ -5,13 +5,13 @@ import { TETROMINO_LAYOUTS } from './constants/tetrominoLayouts';
     The position of a falling tetromino refers to the top-left corner of a 4x4
     box with respect to the game board.
 */
-class FallingTetromino {
-    constructor(tetrominoType, position, rotationState) {
-        this.tetrominoType = tetrominoType;
+class Tetromino {
+    constructor(type, position, rotationState) {
+        this.tetrominoType = type;
         this.position = position;
         this.rotationState = rotationState;
 
-        this._layouts = TETROMINO_LAYOUTS[tetrominoType];
+        this._layouts = TETROMINO_LAYOUTS[type];
     }
 
     getLayout() {
@@ -20,4 +20,4 @@ class FallingTetromino {
 
 }
 
-export default FallingTetromino;
+export default Tetromino;
