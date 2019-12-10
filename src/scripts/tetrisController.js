@@ -31,6 +31,11 @@ class TetrisController {
         return false;
     }
 
+    canTetrominoDrop(board, tetromino) {
+        let droppedTetromino = this.dropTetromino(tetromino);
+        return !this.isCollision(board, droppedTetromino);
+    }
+
     dropTetromino(tetromino) {
         let [pos_y, pos_x] = tetromino.position;
 

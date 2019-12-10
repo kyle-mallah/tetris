@@ -122,3 +122,33 @@ test("Tetromino should drop by one row", () => {
     expect(updatedTetromino.position).toEqual([1,0]);
 });
 
+test("Tetromino cannot drop: adjacent stable tetromino below", () => {
+    board[GRID_HEIGHT-1] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
+
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [GRID_HEIGHT-3, 0],
+        TETROMINO_ROTATION_STATE[0]);
+
+    expect(controller.canTetrominoDrop(board, tetromino)).toBeFalsy();
+});
+
+test("Tetromino can drop: no adjacent stable tetromino below", () => {
+    board[GRID_HEIGHT-1] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
+
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [GRID_HEIGHT-4, 0],
+        TETROMINO_ROTATION_STATE[0]);
+
+    expect(controller.canTetrominoDrop(board, tetromino)).toBeTruthy();
+});
+
+test("Tetromino cannot drop: It would pass the board limits", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [GRID_HEIGHT-2, 0],
+        TETROMINO_ROTATION_STATE[0]);
+
+    expect(controller.canTetrominoDrop(board, tetromino)).toBeFalsy();
+});
