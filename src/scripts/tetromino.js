@@ -7,7 +7,7 @@ import { TETROMINO_LAYOUTS } from './constants/tetrominoLayouts';
 */
 class Tetromino {
     constructor(type, position, rotationState) {
-        this.tetrominoType = type;
+        this.type = type;
         this.position = position;
         this.rotationState = rotationState;
 

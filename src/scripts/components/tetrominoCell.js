@@ -1,8 +1,10 @@
 import React from 'react';
 
 function TetrominoCell(props) {
+    let className = "tetrominoCell " + props.type;
+
     return (
-        <div className="tetrominoCell"/>
+        <div className={className}/>
     )
 }
 

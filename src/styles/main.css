@@ -12,3 +12,35 @@
     width: 1.5em;
     height: 1.5em;
 }
+
+.tetrominoCell.NONE {
+    background-color: white;
+  }
+  
+.tetrominoCell.I {
+    background-color: cyan;
+}
+  
+.tetrominoCell.J {
+    background-color: blue;
+}
+  
+.tetrominoCell.L {
+    background-color: orange;
+}
+  
+.tetrominoCell.O {
+    background-color: yellow;
+}
+  
+.tetrominoCell.S {
+    background-color: limegreen;
+}
+  
+.tetrominoCell.T {
+    background-color: purple;
+}
+  
+.tetrominoCell.Z {
+    background-color: red;
+}
