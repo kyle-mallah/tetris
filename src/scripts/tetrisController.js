@@ -24,15 +24,11 @@ class TetrisController {
     }
 
     stablizeTetromino(board, tetromino) {
-        let layout = tetromino.getLayout();
+        let tetrominoPoints = tetromino.getPoints();
         let [offset_y, offset_x] = tetromino.position;
 
-        for (let r = 0; r < 4; r++) {
-            for (let c = 0; c < 4; c++) {
-                if (layout[r][c]) {
-                    board[r+offset_y][c+offset_x] = tetromino.type;
-                }
-            }
+        for (let [row,col] of tetrominoPoints) {
+            board[row+offset_y][col+offset_x] = tetromino.type;
         }
 
         return board;
@@ -48,16 +44,7 @@ class TetrisController {
 
     isCollision(board, tetromino) {
         let [offset_y, offset_x] = tetromino.position;
-        let tetrominoLayout = tetromino.getLayout();
-
-        let tetrominoPoints = [];
-        for (let r = 0; r < 4; r++) {
-            for (let c = 0; c < 4; c++) {
-                if (tetrominoLayout[r][c]) {
-                    tetrominoPoints.push([r,c])
-                }
-            }
-        }
+        let tetrominoPoints = tetromino.getPoints();
 
         for (const [point_y, point_x] of tetrominoPoints) {
             if (point_y + offset_y >= GRID_HEIGHT) {

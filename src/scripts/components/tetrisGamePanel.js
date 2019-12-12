@@ -18,13 +18,10 @@ class TetrisGamePanel extends React.Component {
         let tetromino = this.props.tetromino;
         if (tetromino) {
             let [offset_y, offset_x] = tetromino.position;
-            let tetrominoLayout = tetromino.getLayout();
-            for (let r = 0; r < 4; r++) {
-                for (let c = 0; c < 4; c++) {
-                    if (tetrominoLayout[r][c]) {
-                        boardToRender[r+offset_y][c+offset_x] = tetromino.type;
-                    }
-                }
+            let tetrominoPoints = tetromino.getPoints();
+
+            for (let [row,col] of tetrominoPoints) {
+                boardToRender[row+offset_y][col+offset_x] = tetromino.type;
             }
         }
 

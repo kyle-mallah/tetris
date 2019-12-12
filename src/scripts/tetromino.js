@@ -14,7 +14,7 @@ class Tetromino {
         this._layouts = TETROMINO_LAYOUTS[type];
     }
 
-    getLayout() {
+    getPoints() {
         return this._layouts[this.rotationState];
     }
 
