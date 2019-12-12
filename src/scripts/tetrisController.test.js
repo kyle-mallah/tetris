@@ -152,3 +152,22 @@ test("Tetromino cannot drop: It would pass the board limits", () => {
 
     expect(controller.canTetrominoDrop(board, tetromino)).toBeFalsy();
 });
+
+test("StablieTetriomino: Tetromino should become part of board", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [5, 5],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let expectedBoard = board.map(row => row.slice());
+    console.log("wtf: " + expectedBoard[0]);
+    expectedBoard[5][6] = TETROMINO_TYPE.O;
+    expectedBoard[5][7] = TETROMINO_TYPE.O;
+    expectedBoard[6][6] = TETROMINO_TYPE.O;
+    expectedBoard[6][7] = TETROMINO_TYPE.O;
+
+    let updatedBoard = controller.stablizeTetromino(board, tetromino);
+
+    expect(JSON.stringify(updatedBoard)).toEqual(JSON.stringify(expectedBoard));
+
+})

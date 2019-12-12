@@ -4,6 +4,21 @@ import Tetromino from './tetromino'
 
 class TetrisController {
 
+    stablizeTetromino(board, tetromino) {
+        let layout = tetromino.getLayout();
+        let [offset_y, offset_x] = tetromino.position;
+
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                if (layout[r][c]) {
+                    board[r+offset_y][c+offset_x] = tetromino.type;
+                }
+            }
+        }
+
+        return board;
+    }
+
     isCollision(board, tetromino) {
         let [offset_y, offset_x] = tetromino.position;
         let tetrominoLayout = tetromino.getLayout();
