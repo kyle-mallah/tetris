@@ -1,8 +1,27 @@
-import { TETROMINO_TYPE, GRID_WIDTH, GRID_HEIGHT } from './constants';
+import {
+    TETROMINO_TYPE,
+    TETROMINO_ROTATION_STATE,
+    GRID_WIDTH,
+    GRID_HEIGHT
+} from './constants';
 import { TETROMINO_LAYOUTS } from './constants/tetrominoLayouts';
 import Tetromino from './tetromino'
 
 class TetrisController {
+
+    spawnTetromino() {
+        let allTypes = Object.keys(TETROMINO_TYPE);
+        allTypes.splice(allTypes.indexOf(TETROMINO_TYPE.NONE), 1);
+
+        let randomType = allTypes[Math.floor(Math.random()*allTypes.length)];
+
+        let spawnedTetromino = new Tetromino(
+            randomType,
+            [0, 3],
+            TETROMINO_ROTATION_STATE[0]);
+
+        return spawnedTetromino;
+    }
 
     stablizeTetromino(board, tetromino) {
         let layout = tetromino.getLayout();
@@ -17,6 +36,14 @@ class TetrisController {
         }
 
         return board;
+    }
+
+    handleLineClears(board) {
+        return board;
+    }
+
+    hasBoardOverflowed(board) {
+        return false;
     }
 
     isCollision(board, tetromino) {

@@ -153,7 +153,7 @@ test("Tetromino cannot drop: It would pass the board limits", () => {
     expect(controller.canTetrominoDrop(board, tetromino)).toBeFalsy();
 });
 
-test("StablieTetriomino: Tetromino should become part of board", () => {
+test("StablizeTetriomino: Tetromino should become part of board", () => {
     let tetromino = new Tetromino(
         TETROMINO_TYPE.O,
         [5, 5],
