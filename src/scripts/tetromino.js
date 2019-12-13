@@ -18,6 +18,11 @@ class Tetromino {
         return this._layouts[this.rotationState];
     }
 
+    rotate() {
+        this.rotationState += 1;
+        this.rotationState = this.rotationState % 4;
+    }
+
 }
 
 export default Tetromino;
