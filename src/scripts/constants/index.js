@@ -13,8 +13,8 @@ export const TETROMINO_TYPE = Object.freeze({
 });
 
 export const TETROMINO_ROTATION_STATE = Object.freeze({
-    0:'0',
-    1:'1',
-    2:'2',
-    3:'3',
+    0:0,
+    1:1,
+    2:2,
+    3:3,
 });

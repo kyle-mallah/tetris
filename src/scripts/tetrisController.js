@@ -24,26 +24,13 @@ class TetrisController {
 
     stablizeTetromino(board, tetromino) {
         let tetrominoPoints = tetromino.getPoints();
-        let [offset_y, offset_x] = tetromino.position;
+        let [offset_y, offset_x] = tetromino.offset;
 
         for (let [row,col] of tetrominoPoints) {
             board[row+offset_y][col+offset_x] = tetromino.type;
         }
 
         return board;
-    }
-
-    rotateTetromino(board, tetromino) {
-        let [pos_y, pos_x] = tetromino.position;
-
-        let updatedTetromino = new Tetromino(
-            tetromino.type,
-            [pos_y, pos_x],
-            tetromino.rotationState);
-
-        updatedTetromino.rotate();
-
-        return updatedTetromino;
     }
 
     handleLineClears(board) {
@@ -54,8 +41,71 @@ class TetrisController {
         return false;
     }
 
+    rotateTetromino(board, tetromino) {
+        let [offset_y, offset_x] = tetromino.offset;
+
+        let updatedTetromino = new Tetromino(
+            tetromino.type,
+            [offset_y, offset_x],
+            tetromino.rotationState);
+
+        updatedTetromino.rotate();
+
+        return updatedTetromino;
+    }
+
+    moveTetrominoLeft(board, tetromino) {
+        let [offset_y, offset_x] = tetromino.offset;
+
+        let obstructionDoesExist = false;
+        for (let [point_y, point_x] of tetromino.getPoints()) {
+            let actual_point_y = point_y + offset_y;
+            let actual_point_x = point_x + offset_x - 1;
+
+            let outOfBounds = actual_point_x < 0;
+            let cellNotEmpty = board[actual_point_y][actual_point_x] !== TETROMINO_TYPE.NONE;
+            obstructionDoesExist = obstructionDoesExist || outOfBounds || cellNotEmpty;
+        }
+
+        if (!obstructionDoesExist) {
+            let updatedTetromino = new Tetromino(
+                tetromino.type,
+                [offset_y, offset_x-1],
+                tetromino.rotationState);
+
+            return updatedTetromino;
+        } else {
+            return tetromino;
+        }
+    }
+
+    moveTetrominoRight(board, tetromino) {
+        let [offset_y, offset_x] = tetromino.offset;
+
+        let obstructionDoesExist = false;
+        for (let [point_y, point_x] of tetromino.getPoints()) {
+            let actual_point_y = point_y + offset_y;
+            let actual_point_x = point_x + offset_x + 1;
+
+            let outOfBounds = actual_point_x < 0;
+            let cellNotEmpty = board[actual_point_y][actual_point_x] !== TETROMINO_TYPE.NONE;
+            obstructionDoesExist = obstructionDoesExist || outOfBounds || cellNotEmpty;
+        }
+
+        if (!obstructionDoesExist) {
+            let updatedTetromino = new Tetromino(
+                tetromino.type,
+                [offset_y, offset_x+1],
+                tetromino.rotationState);
+
+            return updatedTetromino;
+        } else {
+            return tetromino;
+        }
+    }
+
     isCollision(board, tetromino) {
-        let [offset_y, offset_x] = tetromino.position;
+        let [offset_y, offset_x] = tetromino.offset;
         let tetrominoPoints = tetromino.getPoints();
 
         for (const [point_y, point_x] of tetrominoPoints) {
@@ -78,11 +128,11 @@ class TetrisController {
     }
 
     dropTetromino(tetromino) {
-        let [pos_y, pos_x] = tetromino.position;
+        let [offset_y, offset_x] = tetromino.offset;
 
         let updatedTetromino = new Tetromino(
             tetromino.type,
-            [pos_y+1, pos_x],
+            [offset_y+1, offset_x],
             tetromino.rotationState);
 
         return updatedTetromino;

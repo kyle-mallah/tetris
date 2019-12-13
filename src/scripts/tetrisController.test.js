@@ -14,6 +14,8 @@ beforeEach(() => {
     board = controller.initBoard();
 });
 
+
+
 test("Board has dimensions GRID_HEIGHT x GRID_WIDTH", () => {
     expect(board.length).toBe(GRID_HEIGHT);
 
@@ -119,7 +121,7 @@ test("Tetromino should drop by one row", () => {
 
     let updatedTetromino = controller.dropTetromino(tetromino);
 
-    expect(updatedTetromino.position).toEqual([1,0]);
+    expect(updatedTetromino.offset).toEqual([1,0]);
 });
 
 test("Tetromino cannot drop: adjacent stable tetromino below", () => {
@@ -214,4 +216,94 @@ test("rotateTetromino: Tetromino should go from rotationState 3 to rotationState
     let updatedTetromino = controller.rotateTetromino(board, tetromino);
 
     expect(updatedTetromino.rotationState).toEqual(TETROMINO_ROTATION_STATE[0]);
+});
+
+test("moveTetrominoLeft: No obstruction to left of tetromino", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, 0],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.moveTetrominoLeft(board, tetromino);
+
+    let expectedPosition = JSON.stringify([0, -1]);
+    let actualPosition = JSON.stringify(updatedTetromino.offset);
+
+    expect(actualPosition).toEqual(expectedPosition);
+});
+
+test("moveTetrominoLeft: Obstruction to left of tetromino", () => {
+    board[0][0] = TETROMINO_TYPE.O;
+    board[1][0] = TETROMINO_TYPE.O;
+
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, 0],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.moveTetrominoLeft(board, tetromino);
+
+    let expectedPosition = JSON.stringify([0, 0]);
+    let actualPosition = JSON.stringify(updatedTetromino.offset);
+
+    expect(actualPosition).toEqual(expectedPosition);
+});
+
+test("moveTetrominoLeft: Tetromino would move past bounds of board", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, -1],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.moveTetrominoLeft(board, tetromino);
+
+    let expectedPosition = JSON.stringify([0, -1]);
+    let actualPosition = JSON.stringify(updatedTetromino.offset);
+
+    expect(actualPosition).toEqual(expectedPosition);
+});
+
+test("moveTetrominoRight: No obstruction to Right of tetromino", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, GRID_WIDTH-4],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.moveTetrominoRight(board, tetromino);
+
+    let expectedPosition = JSON.stringify([0, GRID_WIDTH-3]);
+    let actualPosition = JSON.stringify(updatedTetromino.offset);
+
+    expect(actualPosition).toEqual(expectedPosition);
+});
+
+test("moveTetrominoRight: Obstruction to Right of tetromino", () => {
+    board[0][GRID_WIDTH-1] = TETROMINO_TYPE.O;
+    board[1][GRID_WIDTH-1] = TETROMINO_TYPE.O;
+
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, GRID_WIDTH-4],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.moveTetrominoRight(board, tetromino);
+
+    let expectedPosition = JSON.stringify([0, GRID_WIDTH-4]);
+    let actualPosition = JSON.stringify(updatedTetromino.offset);
+
+    expect(actualPosition).toEqual(expectedPosition);
+});
+
+test("moveTetrominoRight: Tetromino would move past bounds of board", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, GRID_WIDTH-3],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.moveTetrominoRight(board, tetromino);
+
+    let expectedPosition = JSON.stringify([0, GRID_WIDTH-3]);
+    let actualPosition = JSON.stringify(updatedTetromino.offset);
+
+    expect(actualPosition).toEqual(expectedPosition);
 });

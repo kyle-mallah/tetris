@@ -1,7 +1,13 @@
 import React from 'react';
 
 function TimeRemaining(props) {
-    return "00:00"
+    let secondsRemaining = props.timeRemaining;
+
+    return (
+        <div className="timeRemaining">
+            {secondsRemaining}
+        </div>
+    );
 }
 
 export default TimeRemaining;

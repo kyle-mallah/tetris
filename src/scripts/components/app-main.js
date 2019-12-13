@@ -2,6 +2,8 @@ import React from 'react';
 import TopPanel from './topPanel';
 import TetrisGamePanel from './tetrisGamePanel';
 import TetrisController from '../tetrisController';
+import { ENOTCONN } from 'constants';
+import { Z_BEST_SPEED } from 'zlib';
 
 class App extends React.Component {
 
@@ -11,21 +13,79 @@ class App extends React.Component {
         this.controller = new TetrisController;
 
         this.state = {
-            timeRemaining: 100,
+            timeRemaining: 10000,
             board: this.controller.initBoard(),
             tetromino:null,
             linesSent:0
         }
+
+        this.handleKeypress = this.handleKeyPress(this);
     }
 
     componentDidMount() {
         this.interval = setInterval(() => {
             this.updateGameState()
-        }, 700);
+        }, 200);
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
+    }
+
+    handleKeyPress(event) {
+        switch (event.key) {
+            case 'ArrowUp':
+                this.handleRotateTetromino();
+                break;
+            case 'ArrowLeft':
+                this.handleMoveTetrominoLeft();
+                break;
+            case 'ArrowRight':
+                this.handleMoveTetrominoRight();
+                break;
+        }
+    }
+
+    handleRotateTetromino() {
+        let board = this.state.board;
+        let tetromino = this.state.tetromino;
+
+        if (tetromino) {
+            let updatedTetromino = this.controller.rotateTetromino(
+                this.state.board,
+                this.state.tetromino);
+        
+            this.setState({tetromino: updatedTetromino});
+
+        }
+    }
+
+    handleMoveTetrominoLeft() {
+        let board = this.state.board;
+        let tetromino = this.state.tetromino;
+
+        if (tetromino) {
+            let updatedTetromino = this.controller.moveTetrominoLeft(
+                this.state.board,
+                this.state.tetromino);
+        
+            this.setState({tetromino: updatedTetromino});
+
+        }
+    }
+
+    handleMoveTetrominoRight() {
+        let board = this.state.board;
+        let tetromino = this.state.tetromino;
+
+        if (tetromino) {
+            let updatedTetromino = this.controller.moveTetrominoRight(
+                this.state.board,
+                this.state.tetromino);
+        
+            this.setState({tetromino: updatedTetromino});
+
+        }
     }
 
     updateGameState() {
@@ -57,6 +117,10 @@ class App extends React.Component {
             // TODO: game over
         }
 
+        // todo: controller rotate -> check that rotate is possible. Tests
+        // - make sure we are copying things properly e.g. workingTetromino etc
+        // - change time to countdown independent of update speed
+
         workingTimeRemaining -= 1;
         
         this.setState({
@@ -68,8 +132,8 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-                <TopPanel />
+            <div id="sup" tabIndex="1" onKeyDown={(e) => this.handleKeyPress(e)}>
+                <TopPanel timeRemaining={this.state.timeRemaining}/>
                 <TetrisGamePanel
                     board={this.state.board}
                     tetromino={this.state.tetromino}/>

@@ -5,7 +5,7 @@ import LinesSentCounter from './linesSentCounter'
 function TopPanel(props) {
     return (
             <div>
-                <TimeRemaining />
+                <TimeRemaining timeRemaining={props.timeRemaining}/>
                 <LinesSentCounter />
             </div>
     );
