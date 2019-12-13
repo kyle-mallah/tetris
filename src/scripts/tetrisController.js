@@ -4,7 +4,6 @@ import {
     GRID_WIDTH,
     GRID_HEIGHT
 } from './constants';
-import { TETROMINO_LAYOUTS } from './constants/tetrominoLayouts';
 import Tetromino from './tetromino'
 
 class TetrisController {
@@ -32,6 +31,19 @@ class TetrisController {
         }
 
         return board;
+    }
+
+    rotateTetromino(board, tetromino) {
+        let [pos_y, pos_x] = tetromino.position;
+
+        let updatedTetromino = new Tetromino(
+            tetromino.type,
+            [pos_y, pos_x],
+            tetromino.rotationState);
+
+        updatedTetromino.rotate();
+
+        return updatedTetromino;
     }
 
     handleLineClears(board) {

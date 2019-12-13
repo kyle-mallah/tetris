@@ -170,4 +170,48 @@ test("StablizeTetriomino: Tetromino should become part of board", () => {
 
     expect(JSON.stringify(updatedBoard)).toEqual(JSON.stringify(expectedBoard));
 
-})
+});
+
+test("rotateTetromino: Tetromino should go from rotationState 0 to rotationState 1", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [5, 5],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.rotateTetromino(board, tetromino);
+
+    expect(updatedTetromino.rotationState).toEqual(TETROMINO_ROTATION_STATE[1]);
+});
+
+test("rotateTetromino: Tetromino should go from rotationState 1 to rotationState 2", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [5, 5],
+        TETROMINO_ROTATION_STATE[1]);
+
+    let updatedTetromino = controller.rotateTetromino(board, tetromino);
+
+    expect(updatedTetromino.rotationState).toEqual(TETROMINO_ROTATION_STATE[2]);
+});
+
+test("rotateTetromino: Tetromino should go from rotationState 2 to rotationState 3", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [5, 5],
+        TETROMINO_ROTATION_STATE[2]);
+
+    let updatedTetromino = controller.rotateTetromino(board, tetromino);
+
+    expect(updatedTetromino.rotationState).toEqual(TETROMINO_ROTATION_STATE[3]);
+});
+
+test("rotateTetromino: Tetromino should go from rotationState 3 to rotationState 0", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [5, 5],
+        TETROMINO_ROTATION_STATE[3]);
+
+    let updatedTetromino = controller.rotateTetromino(board, tetromino);
+
+    expect(updatedTetromino.rotationState).toEqual(TETROMINO_ROTATION_STATE[0]);
+});
