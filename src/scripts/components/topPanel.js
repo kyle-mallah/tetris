@@ -4,7 +4,7 @@ import LinesSentCounter from './linesSentCounter'
 function TopPanel(props) {
     return (
             <div>
-                <LinesSentCounter />
+                <LinesSentCounter linesCleared={props.linesCleared}/>
             </div>
     );
 }

@@ -23,7 +23,7 @@ class App extends React.Component {
             gravity: 1/20,
             board: this.controller.initBoard(),
             tetromino:null,
-            linesSent:0
+            linesCleared:0
         }
 
         this.handleKeypress = this.handleKeyPress(this);
@@ -126,6 +126,7 @@ class App extends React.Component {
 
             let workingBoard = this.state.board.map(row => row.slice());
             let workingTetromino = this.state.tetromino;
+            let workingLinesCleared = this.state.linesCleared;
 
             if (workingTetromino) {
                 // an unstable tetromino exists
@@ -139,7 +140,9 @@ class App extends React.Component {
                 }
             } else {
                 // Board is stable
-                workingBoard = this.controller.handleLineClears(workingBoard);
+                let [board, linesCleared] = this.controller.handleLineClears(workingBoard);
+                workingBoard = board;
+                workingLinesCleared += linesCleared;
                 if (this.controller.hasBoardOverflowed(workingBoard)) {
                     // TODO: game over
                 }
@@ -150,6 +153,7 @@ class App extends React.Component {
             this.setState({
                 board: workingBoard,
                 tetromino: workingTetromino,
+                linesCleared: workingLinesCleared,
             });
         }
     }
@@ -160,7 +164,7 @@ class App extends React.Component {
                 onKeyDown={(e) => this.handleKeyPress(e)}
                 ref={this.focusRef}>
                     
-                <TopPanel/>
+                <TopPanel linesCleared={this.state.linesCleared}/>
                 <TetrisGamePanel
                     board={this.state.board}
                     tetromino={this.state.tetromino}/>

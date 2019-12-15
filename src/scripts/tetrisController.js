@@ -48,7 +48,7 @@ class TetrisController {
             }
         }
 
-        return board;
+        return [board, numRowsEliminated];
     }
 
     moveRowToIndex(board, rowIndex, toIndex) {
