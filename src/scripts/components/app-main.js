@@ -44,7 +44,6 @@ class App extends React.Component {
     }
 
     handleKeyPress(event) {
-        console.log(event.key);
         switch (event.key) {
             case 'ArrowUp':
                 this.handleRotateTetromino();

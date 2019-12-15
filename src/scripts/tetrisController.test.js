@@ -162,7 +162,6 @@ test("StablizeTetriomino: Tetromino should become part of board", () => {
         TETROMINO_ROTATION_STATE[0]);
 
     let expectedBoard = board.map(row => row.slice());
-    console.log("wtf: " + expectedBoard[0]);
     expectedBoard[5][6] = TETROMINO_TYPE.O;
     expectedBoard[5][7] = TETROMINO_TYPE.O;
     expectedBoard[6][6] = TETROMINO_TYPE.O;
@@ -342,7 +341,7 @@ test("handleLineClears: only bottom row is full", () => {
     let expectedBoard = board.map(row => row.slice());
     
     board[GRID_HEIGHT-1] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
-    let updatedBoard = controller.handleLineClears(board);
+    let [updatedBoard, _] = controller.handleLineClears(board);
 
     expect(JSON.stringify(updatedBoard)).toEqual(JSON.stringify(expectedBoard));
 });
@@ -354,7 +353,7 @@ test("handleLineClears: bottom 4 rows are full", () => {
     board[GRID_HEIGHT-2] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
     board[GRID_HEIGHT-3] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
     board[GRID_HEIGHT-4] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
-    let updatedBoard = controller.handleLineClears(board);
+    let [updatedBoard, _] = controller.handleLineClears(board);
 
 
     expect(JSON.stringify(updatedBoard)).toEqual(JSON.stringify(expectedBoard));
@@ -369,7 +368,7 @@ test("handleLineClears: first and third from bottom clear", () => {
     board[GRID_HEIGHT-2] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I, 2);
     board[GRID_HEIGHT-3] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
     board[GRID_HEIGHT-4] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I, 2);
-    let updatedBoard = controller.handleLineClears(board);
+    let [updatedBoard, _] = controller.handleLineClears(board);
 
     expect(JSON.stringify(updatedBoard)).toEqual(JSON.stringify(expectedBoard));
 });
