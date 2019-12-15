@@ -2,6 +2,7 @@ export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 20;
 
 export const TETROMINO_TYPE = Object.freeze({
+    GHOST:'GHOST',
     NONE:'NONE',
     I:'I',
     J:'J',

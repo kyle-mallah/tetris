@@ -10,7 +10,7 @@ class TetrisController {
 
     spawnTetromino() {
         let allTypes = Object.keys(TETROMINO_TYPE);
-        allTypes.splice(allTypes.indexOf(TETROMINO_TYPE.NONE), 1);
+        allTypes.splice(allTypes.indexOf(TETROMINO_TYPE.GHOST), 2);
 
         let randomType = allTypes[Math.floor(Math.random()*allTypes.length)];
 
@@ -159,8 +159,6 @@ class TetrisController {
     }
 
     hardDropTetromino(board, tetromino) {
-        let [offset_y, offset_x] = tetromino.offset;
-
         while (this.canTetrominoDrop(board, tetromino)) {
             tetromino = this.dropTetromino(tetromino);
         }
