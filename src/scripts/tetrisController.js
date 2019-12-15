@@ -34,6 +34,26 @@ class TetrisController {
     }
 
     handleLineClears(board) {
+        board = board.map(row => row.slice());
+
+        let numRowsEliminated = 0;
+        for (let r = board.length-1; r >= 0; r--) {
+            let row = board[r];
+
+            if (row.filter(cell => cell !== TETROMINO_TYPE.NONE).length == GRID_WIDTH) {
+                row.fill(TETROMINO_TYPE.NONE);
+                numRowsEliminated++;
+            } else {
+                board = this.moveRowToIndex(board, r, r+numRowsEliminated);
+            }
+        }
+
+        return board;
+    }
+
+    moveRowToIndex(board, rowIndex, toIndex) {
+        board[toIndex] = board[rowIndex];
+
         return board;
     }
 
