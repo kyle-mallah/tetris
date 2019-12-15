@@ -14,14 +14,12 @@ class App extends React.Component {
             frameInterval: 1000.0/FPS,
             lastFrameUpdateTime: null,
             lastGameUpdateTime: null,
-            lastTimerUpdateTime: null,
         }
 
         this.controller = new TetrisController();
         this.focusRef = React.createRef();
 
         this.state = {
-            timeRemaining: 10000,
             gravity: 1/20,
             board: this.controller.initBoard(),
             tetromino:null,
@@ -36,7 +34,6 @@ class App extends React.Component {
         let now = Date.now();
         this.gameLoop.lastFrameUpdateTime = now;
         this.gameLoop.lastGameUpdateTime = now;
-        this.gameLoop.lastTimerUpdateTime = now;
         this.gameLoop.animationId = window.requestAnimationFrame(this.gameTick);
 
         this.focusRef.current.focus();
@@ -114,41 +111,29 @@ class App extends React.Component {
             this.gameLoop.lastGameUpdateTime = now;
 
             let workingBoard = this.state.board.map(row => row.slice());
-            let workingTimeRemaining = this.state.timeRemaining;
             let workingTetromino = this.state.tetromino;
 
-            let timerElapsed = now - this.gameLoop.lastTimerUpdateTime;
-            if (timerElapsed > 1000) {
-                this.gameLoop.lastTimerUpdateTime = now;
-                workingTimeRemaining -= 1;
-            }
-
-            if (this.state.timeRemaining > 0) {
-                if (workingTetromino) {
-                    // an unstable tetromino exists
-                    if (this.controller.canTetrominoDrop(workingBoard,workingTetromino)) {
-                        workingTetromino = this.controller.dropTetromino(workingTetromino);
-                    } else {
-                        workingBoard = this.controller.stablizeTetromino(
-                            workingBoard,
-                            workingTetromino);
-                        workingTetromino = null;
-                    }
+            if (workingTetromino) {
+                // an unstable tetromino exists
+                if (this.controller.canTetrominoDrop(workingBoard,workingTetromino)) {
+                    workingTetromino = this.controller.dropTetromino(workingTetromino);
                 } else {
-                    // Board is stable
-                    workingBoard = this.controller.handleLineClears(workingBoard);
-                    if (this.controller.hasBoardOverflowed(workingBoard)) {
-                        // TODO: game over
-                    }
-            
-                    workingTetromino = this.controller.spawnTetromino();
+                    workingBoard = this.controller.stablizeTetromino(
+                        workingBoard,
+                        workingTetromino);
+                    workingTetromino = null;
                 }
             } else {
-                // TODO: game over
+                // Board is stable
+                workingBoard = this.controller.handleLineClears(workingBoard);
+                if (this.controller.hasBoardOverflowed(workingBoard)) {
+                    // TODO: game over
+                }
+        
+                workingTetromino = this.controller.spawnTetromino();
             }
             
             this.setState({
-                timeRemaining: workingTimeRemaining,
                 board: workingBoard,
                 tetromino: workingTetromino,
             });
@@ -161,7 +146,7 @@ class App extends React.Component {
                 onKeyDown={(e) => this.handleKeyPress(e)}
                 ref={this.focusRef}>
                     
-                <TopPanel timeRemaining={this.state.timeRemaining}/>
+                <TopPanel/>
                 <TetrisGamePanel
                     board={this.state.board}
                     tetromino={this.state.tetromino}/>
