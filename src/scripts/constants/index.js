@@ -18,3 +18,5 @@ export const TETROMINO_ROTATION_STATE = Object.freeze({
     2:2,
     3:3,
 });
+
+export const FPS = 60;

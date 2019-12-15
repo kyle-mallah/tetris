@@ -2,34 +2,48 @@ import React from 'react';
 import TopPanel from './topPanel';
 import TetrisGamePanel from './tetrisGamePanel';
 import TetrisController from '../tetrisController';
-import { ENOTCONN } from 'constants';
-import { Z_BEST_SPEED } from 'zlib';
+import { FPS } from '../constants';
 
 class App extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.controller = new TetrisController;
+        this.gameLoop = {
+            animationId: null,
+            frameInterval: 1000.0/FPS,
+            lastFrameUpdateTime: null,
+            lastGameUpdateTime: null,
+            lastTimerUpdateTime: null,
+        }
+
+        this.controller = new TetrisController();
+        this.focusRef = React.createRef();
 
         this.state = {
             timeRemaining: 10000,
+            gravity: 1/20,
             board: this.controller.initBoard(),
             tetromino:null,
             linesSent:0
         }
 
         this.handleKeypress = this.handleKeyPress(this);
+        this.gameTick = this.gameTick.bind(this);
     }
 
     componentDidMount() {
-        this.interval = setInterval(() => {
-            this.updateGameState()
-        }, 200);
+        let now = Date.now();
+        this.gameLoop.lastFrameUpdateTime = now;
+        this.gameLoop.lastGameUpdateTime = now;
+        this.gameLoop.lastTimerUpdateTime = now;
+        this.gameLoop.animationId = window.requestAnimationFrame(this.gameTick);
+
+        this.focusRef.current.focus();
     }
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        window.cancelAnimationFrame(this.gameLoop.animationId);
     }
 
     handleKeyPress(event) {
@@ -47,10 +61,7 @@ class App extends React.Component {
     }
 
     handleRotateTetromino() {
-        let board = this.state.board;
-        let tetromino = this.state.tetromino;
-
-        if (tetromino) {
+        if (this.state.tetromino) {
             let updatedTetromino = this.controller.rotateTetromino(
                 this.state.board,
                 this.state.tetromino);
@@ -61,10 +72,7 @@ class App extends React.Component {
     }
 
     handleMoveTetrominoLeft() {
-        let board = this.state.board;
-        let tetromino = this.state.tetromino;
-
-        if (tetromino) {
+        if (this.state.tetromino) {
             let updatedTetromino = this.controller.moveTetrominoLeft(
                 this.state.board,
                 this.state.tetromino);
@@ -75,10 +83,7 @@ class App extends React.Component {
     }
 
     handleMoveTetrominoRight() {
-        let board = this.state.board;
-        let tetromino = this.state.tetromino;
-
-        if (tetromino) {
+        if (this.state.tetromino) {
             let updatedTetromino = this.controller.moveTetrominoRight(
                 this.state.board,
                 this.state.tetromino);
@@ -88,51 +93,74 @@ class App extends React.Component {
         }
     }
 
-    updateGameState() {
-        let workingBoard = this.state.board.map(row => row.slice());
-        let workingTimeRemaining = this.state.timeRemaining;
-        let workingTetromino = this.state.tetromino;
+    gameTick() {
+        let now = Date.now();
+        let frameElapsed = now - this.gameLoop.lastFrameUpdateTime;
 
-        if (this.state.timeRemaining > 0) {
-            if (workingTetromino) {
-                if (this.controller.canTetrominoDrop(workingBoard,workingTetromino)) {
-                    workingTetromino = this.controller.dropTetromino(workingTetromino);
-                } else {
-                    // tetromino becomes stable
-                    workingBoard = this.controller.stablizeTetromino(
-                        workingBoard,
-                        workingTetromino);
-                    workingTetromino = null;
-                }
-            } else {
-                // Board is stable
-                workingBoard = this.controller.handleLineClears(workingBoard);
-                if (this.controller.hasBoardOverflowed(workingBoard)) {
-                    // TODO: game over
-                }
-        
-                workingTetromino = this.controller.spawnTetromino();
-            }
-        } else {
-            // TODO: game over
+        if (frameElapsed > this.gameLoop.frameInterval) {
+            this.gameLoop.lastFrameUpdateTime = now - (frameElapsed % this.gameLoop.frameInterval);
+
+            this.updateGameState(now);
         }
 
-        // todo: controller rotate -> check that rotate is possible. Tests
-        // - make sure we are copying things properly e.g. workingTetromino etc
-        // - change time to countdown independent of update speed
+        this.gameLoop.animationId = window.requestAnimationFrame(this.gameTick);
+    }
 
-        workingTimeRemaining -= 1;
+    updateGameState(now) {
+        let gameUpdateInterval = 1000/FPS/this.state.gravity;
+        let gameUpdateElapsed = now - this.gameLoop.lastGameUpdateTime;
         
-        this.setState({
-            timeRemaining: workingTimeRemaining,
-            board: workingBoard,
-            tetromino: workingTetromino,
-        });
+        if (gameUpdateElapsed > gameUpdateInterval) {
+            this.gameLoop.lastGameUpdateTime = now;
+
+            let workingBoard = this.state.board.map(row => row.slice());
+            let workingTimeRemaining = this.state.timeRemaining;
+            let workingTetromino = this.state.tetromino;
+
+            let timerElapsed = now - this.gameLoop.lastTimerUpdateTime;
+            if (timerElapsed > 1000) {
+                this.gameLoop.lastTimerUpdateTime = now;
+                workingTimeRemaining -= 1;
+            }
+
+            if (this.state.timeRemaining > 0) {
+                if (workingTetromino) {
+                    // an unstable tetromino exists
+                    if (this.controller.canTetrominoDrop(workingBoard,workingTetromino)) {
+                        workingTetromino = this.controller.dropTetromino(workingTetromino);
+                    } else {
+                        workingBoard = this.controller.stablizeTetromino(
+                            workingBoard,
+                            workingTetromino);
+                        workingTetromino = null;
+                    }
+                } else {
+                    // Board is stable
+                    workingBoard = this.controller.handleLineClears(workingBoard);
+                    if (this.controller.hasBoardOverflowed(workingBoard)) {
+                        // TODO: game over
+                    }
+            
+                    workingTetromino = this.controller.spawnTetromino();
+                }
+            } else {
+                // TODO: game over
+            }
+            
+            this.setState({
+                timeRemaining: workingTimeRemaining,
+                board: workingBoard,
+                tetromino: workingTetromino,
+            });
+        }
     }
 
     render() {
         return (
-            <div id="sup" tabIndex="1" onKeyDown={(e) => this.handleKeyPress(e)}>
+            <div tabIndex="1"
+                onKeyDown={(e) => this.handleKeyPress(e)}
+                ref={this.focusRef}>
+                    
                 <TopPanel timeRemaining={this.state.timeRemaining}/>
                 <TetrisGamePanel
                     board={this.state.board}
