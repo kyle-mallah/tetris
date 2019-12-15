@@ -44,6 +44,7 @@ class App extends React.Component {
     }
 
     handleKeyPress(event) {
+        console.log(event.key);
         switch (event.key) {
             case 'ArrowUp':
                 this.handleRotateTetromino();
@@ -53,6 +54,9 @@ class App extends React.Component {
                 break;
             case 'ArrowRight':
                 this.handleMoveTetrominoRight();
+                break;
+            case ' ':
+                this.handleHardDropTetromino();
                 break;
         }
     }
@@ -87,6 +91,16 @@ class App extends React.Component {
         
             this.setState({tetromino: updatedTetromino});
 
+        }
+    }
+
+    handleHardDropTetromino() {
+        if (this.state.tetromino) {
+            let updatedTetromino = this.controller.hardDropTetromino(
+                this.state.board,
+                this.state.tetromino);
+
+            this.setState({tetromino: updatedTetromino});
         }
     }
 
