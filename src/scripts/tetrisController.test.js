@@ -307,3 +307,33 @@ test("moveTetrominoRight: Tetromino would move past bounds of board", () => {
 
     expect(actualPosition).toEqual(expectedPosition);
 });
+
+test("hardDropTetromino: Dropping onto bottom of empty board", () => {
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, 5],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.hardDropTetromino(board, tetromino);
+
+    let actualOffset = JSON.stringify(updatedTetromino.offset);
+    let expectedOffset = JSON.stringify([GRID_HEIGHT-2, 5]);
+
+    expect(actualOffset).toEqual(expectedOffset)
+});
+
+test("hardDropTetromino: Dropping onto bottom of board with bottom row filled", () => {
+    board[GRID_HEIGHT-1] = Array(GRID_WIDTH).fill(TETROMINO_TYPE.I);
+
+    let tetromino = new Tetromino(
+        TETROMINO_TYPE.O,
+        [0, 5],
+        TETROMINO_ROTATION_STATE[0]);
+
+    let updatedTetromino = controller.hardDropTetromino(board, tetromino);
+
+    let actualOffset = JSON.stringify(updatedTetromino.offset);
+    let expectedOffset = JSON.stringify([GRID_HEIGHT-3, 5]);
+
+    expect(actualOffset).toEqual(expectedOffset)
+});

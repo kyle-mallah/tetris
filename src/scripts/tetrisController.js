@@ -138,6 +138,16 @@ class TetrisController {
         return updatedTetromino;
     }
 
+    hardDropTetromino(board, tetromino) {
+        let [offset_y, offset_x] = tetromino.offset;
+
+        while (this.canTetrominoDrop(board, tetromino)) {
+            tetromino = this.dropTetromino(tetromino);
+        }
+
+        return tetromino;
+    }
+
     initBoard() {
         let board = [];
 
