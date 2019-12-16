@@ -40,7 +40,7 @@ class TetrisController {
         for (let r = board.length-1; r >= 0; r--) {
             let row = board[r];
 
-            if (row.filter(cell => cell !== TETROMINO_TYPE.NONE).length == GRID_WIDTH) {
+            if (row.filter(cell => cell !== TETROMINO_TYPE.NONE).length === GRID_WIDTH) {
                 row.fill(TETROMINO_TYPE.NONE);
                 numRowsEliminated++;
             } else {
