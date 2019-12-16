@@ -2,7 +2,7 @@ import React from 'react';
 import TopPanel from './topPanel';
 import TetrisGamePanel from './tetrisGamePanel';
 import TetrisController from '../tetrisController';
-import { FPS } from '../constants';
+import { FPS, TETROMINO_TYPE } from '../constants';
 
 class App extends React.Component {
 
@@ -99,8 +99,15 @@ class App extends React.Component {
                 this.state.board,
                 this.state.tetromino);
 
-            this.setState({tetromino: updatedTetromino});
+            let stableBoard = this.controller.stablizeTetromino(
+                this.state.board, updatedTetromino);
+
+            this.setState({board: stableBoard, tetromino: null}, () => {
+                this.updateGameState(Date.now(), true);
+            });            
         }
+
+        
     }
 
     gameTick() {
@@ -116,11 +123,11 @@ class App extends React.Component {
         this.gameLoop.animationId = window.requestAnimationFrame(this.gameTick);
     }
 
-    updateGameState(now) {
+    updateGameState(now, forceUpdate=false) {
         let gameUpdateInterval = 1000/FPS/this.state.gravity;
         let gameUpdateElapsed = now - this.gameLoop.lastGameUpdateTime;
         
-        if (gameUpdateElapsed > gameUpdateInterval) {
+        if (gameUpdateElapsed > gameUpdateInterval || forceUpdate) {
             this.gameLoop.lastGameUpdateTime = now;
 
             let workingBoard = this.state.board.map(row => row.slice());
