@@ -1,0 +1,2 @@
+.tetrominoRow{display:flex;flex-direction:row}.tetrominoCell{border:1px solid #000;float:left;margin-right:-1px;margin-top:-1px;width:1.5em;height:1.5em}.tetrominoCell.GHOST{background-color:#d3d3d3}.tetrominoCell.NONE{background-color:#fff}.tetrominoCell.I{background-color:#0ff}.tetrominoCell.J{background-color:#00f}.tetrominoCell.L{background-color:orange}.tetrominoCell.O{background-color:#ff0}.tetrominoCell.S{background-color:#32cd32}.tetrominoCell.T{background-color:purple}.tetrominoCell.Z{background-color:red}
+/*# sourceMappingURL=main.ca1bcbfa.chunk.css.map */
