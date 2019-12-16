@@ -1,4 +1,4 @@
-# [kylemallah.com/tetris](www.kylemallah.com/tetris)
+# <a href="https://www.kylemallah.com/tetris">kylemallah.com/tetris</a>
 
 A work-in-progress built with the underlying goal of learning React and related frontend technologies.
 
