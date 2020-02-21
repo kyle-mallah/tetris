@@ -124,6 +124,14 @@ class TetrisController {
         }
     }
 
+    softDropTetromino(board, tetromino) {
+        if (this.canTetrominoDrop(board, tetromino)) {
+            tetromino = this.dropTetromino(tetromino);
+        }
+
+        return tetromino;
+    }
+
     isCollision(board, tetromino) {
         let [offset_y, offset_x] = tetromino.offset;
         let tetrominoPoints = tetromino.getPoints();

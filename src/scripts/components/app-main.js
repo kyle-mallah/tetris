@@ -48,6 +48,9 @@ class App extends React.Component {
             case 'ArrowUp':
                 this.handleRotateTetromino();
                 break;
+            case 'ArrowDown':
+                this.handleSoftDropTetromino();
+                break;
             case 'ArrowLeft':
                 this.handleMoveTetrominoLeft();
                 break;
@@ -63,6 +66,17 @@ class App extends React.Component {
     handleRotateTetromino() {
         if (this.state.tetromino) {
             let updatedTetromino = this.controller.rotateTetromino(
+                this.state.board,
+                this.state.tetromino);
+        
+            this.setState({tetromino: updatedTetromino});
+
+        }
+    }
+
+    handleSoftDropTetromino() {
+        if (this.state.tetromino) {
+            let updatedTetromino = this.controller.softDropTetromino(
                 this.state.board,
                 this.state.tetromino);
         
